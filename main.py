@@ -1,12 +1,20 @@
 import datetime
 import requests
 
-city = input()
-city_coords = requests.get(
-    'http://search.maps.sputnik.ru/search/addr?',
-    params={'q': city},
-)
-coords = city_coords.json()['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates']
+
+while True:
+    city = input()
+    city_coords = requests.get(
+        'http://search.maps.sputnik.ru/search/addr?',
+        params={'q': city},
+    )
+    try:
+        coords = city_coords.json()['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates']
+        break
+    except KeyError as e:
+        print('Такого города нет, пожалуйста введите другой город')
+
+
 time = int((datetime.datetime.now()
             .replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=4))
            .timestamp())
